@@ -3,6 +3,12 @@ import numpy as np
 import time
 import os
 
+from classify_image import image_classifiaction
+
+
+def load_image():
+    cv2.imread(f'image/capture_image_{int(time.time())}')
+
 def getCameraStream():
     cam = cv2.VideoCapture(0)
     if not cam.isOpened():
@@ -16,7 +22,7 @@ def getCameraStream():
 
     image_save_dir = "image/"
     image_filename = None
-    image_save_interval = 10
+    image_save_interval = 60
 
     while True:
         val, frame = cam.read()
@@ -27,7 +33,7 @@ def getCameraStream():
         frame_diff = cv2.absdiff(prev_frame, frame)
         diff_percentage = np.count_nonzero(frame_diff) / frame_diff.size
 
-        if diff_percentage > 0.4:
+        if diff_percentage > 0.9:
             image_filename = f"{image_save_dir}capture_image_{int(time.time())}.jpg"
             cv2.imwrite(image_filename, frame)
             print(f"이미지를 저장했습니다 : {image_filename}")
@@ -39,10 +45,11 @@ def getCameraStream():
 
         prev_frame = frame
 
-        bool, jpeg_frame = cv2.imencode('.jpg', frame)
-        if bool:
-            yield (b'--frame\r\n'
-                b'Content-Type: image/jpeg\r\n\r\n' + jpeg_frame.tobytes() + b'\r\n')
+        predict = image_classifiaction(image_filename)
+        
+        return predict
 
-    cam.release()
-    cv2.destroyAllWindows()
+        # bool, jpeg_frame = cv2.imencode('.jpg', frame)
+        # if bool:
+        #     yield (b'--frame\r\n'
+        #         b'Content-Type: image/jpeg\r\n\r\n' + jpeg_frame.tobytes() + b'\r\n')
