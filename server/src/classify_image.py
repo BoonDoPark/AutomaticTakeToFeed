@@ -14,11 +14,10 @@ def image_classifiaction(filename):
     # 이진화 이미지에서 사료를 나타내는 특정 색상 또는 패턴을 검출합니다.
     # 이 예제에서는 검은색 픽셀을 검출합니다. 색상이나 패턴이 다를 수 있습니다.
     has_pet_food = np.sum(binary < 255) > 0
-    print(has_pet_food)
 
     if has_pet_food:
         print('0')
         return 0
     else:
         print('1')
-        return 1
+        return 180
