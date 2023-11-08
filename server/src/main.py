@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse, StreamingResponse
-from classify_image import image_classifiaction
 
 from stream_cv import getCameraStream, load_image
 
